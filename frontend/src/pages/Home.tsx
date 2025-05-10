@@ -5,6 +5,7 @@ import { useToast } from '../contexts/ToastContext';
 import { Navbar } from '../components/Navbar';
 import { scores } from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { text } from '../utils/api';
 
 const SAMPLE_TEXT = "The quick brown fox jumps over the lazy dog. Programming is the process of creating a set of instructions that tell a computer how to perform a task. Programming can be done using a variety of computer programming languages, such as JavaScript, Python, and C++. The best way to learn programming is to practice writing code and building projects.";
 
@@ -25,11 +26,15 @@ export default function Home() {
 
     const fetchText = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/text');
-            const data = await response.json();
-            setText(data.text);
+            const response = await text.getRandomText();
+            if (response.data) {
+                setText(response.data.text);
+            } else {
+                setText(SAMPLE_TEXT);
+            }
         } catch (error) {
             console.error('Error fetching text:', error);
+            setText(SAMPLE_TEXT);
         }
     };
 
